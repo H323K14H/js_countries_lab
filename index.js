@@ -29,7 +29,7 @@ const createCountryDetailsElement = (countryDetails) => {
 const getCountryByName = async (countryName) => {
     const countryData = await fetchCountryData(countryName);
     return countryData;
-}
+};
 
 const displayCountryDetails = async (countryName) => {
 
@@ -49,30 +49,43 @@ const displayCountryDetails = async (countryName) => {
 };
 
 const getAllCountries = async () => {
-    const response = await fetch(`https://restcountries.com/v3.1/all`);
-    const countriesData = await response.json();
-    return countriesData;
-}
+    try {
+        const response = await fetch(`https://restcountries.com/v3.1/al`);
+
+        if (!response.ok) {
+            throw new Error(`${response.status}`);
+        }
+
+        const countriesData = await response.json();
+        return countriesData;
+    } catch (error) {
+        console.error(`ERROR ${error.message}: Cannot fetch all countries.`)
+    }
+};
 
 const displayAllCountries = async () => {
-    const countriesData = await getAllCountries();
+    try {
+        const countriesData = await getAllCountries();
 
-    const countriesContainer = document.querySelector('#all-countries');
+        const countriesContainer = document.querySelector('#all-countries');
 
-    countriesData.forEach((country) => {
-        const countryElement = document.createElement('div');
-        countryElement.textContent = country.name.common;
+        countriesData.forEach((country) => {
+            const countryElement = document.createElement('div');
+            countryElement.textContent = country.name.common;
 
-        const countryDetailsButton = document.createElement('button');
-        countryDetailsButton.textContent = 'Show Details';
-        countryDetailsButton.addEventListener('click', async () => {
-            await displayCountryDetails(country.name.common);
+            const countryDetailsButton = document.createElement('button');
+            countryDetailsButton.textContent = 'Show Details';
+            countryDetailsButton.addEventListener('click', async () => {
+                await displayCountryDetails(country.name.common);
+            });
+
+            countryElement.appendChild(countryDetailsButton);
+            countriesContainer.appendChild(countryElement);
         });
+    } catch (error) {
+        console.error(`Cannot display all countries.`)
+    }
+};
 
-        countryElement.appendChild(countryDetailsButton);
-        countriesContainer.appendChild(countryElement);
-    });
-}
-// displayAllCountries();
-
-displayCountryDetails("Switzerlnd");
+displayAllCountries();
+// displayCountryDetails("Switzerlnd");
