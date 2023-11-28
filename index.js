@@ -1,7 +1,16 @@
 const fetchCountryData = async (countryName) => {
-    const response = await fetch(`https://restcountries.com/v3.1/name/${countryName}`);
-    const data = await response.json();
-    return data;
+    try {
+        const response = await fetch(`https://restcountries.com/v3.1/name/${countryName}`);
+
+        if (!response.ok) {
+            throw new Error(`${response.status}`);
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error(`ERROR ${error.message}: "${countryName}" is not a country.`);
+    }
 };
 
 const createCountryDetailsElement = (countryDetails) => {
@@ -24,15 +33,19 @@ const getCountryByName = async (countryName) => {
 
 const displayCountryDetails = async (countryName) => {
 
-    const countryData = await getCountryByName(countryName);
-    const countryDetails = {
-        name: countryData[0].name.common,
-        languages: Object.values(countryData[0].languages).join(`, `),
-        capital: countryData[0].capital,
-        population: countryData[0].population,
-    };
+    try {
+        const countryData = await getCountryByName(countryName);
+        const countryDetails = {
+            name: countryData[0].name.common,
+            languages: Object.values(countryData[0].languages).join(`, `),
+            capital: countryData[0].capital,
+            population: countryData[0].population,
+        };
 
-    createCountryDetailsElement(countryDetails);
+        createCountryDetailsElement(countryDetails);
+    } catch (error) {
+        console.error(`ERROR: Cannot display details of "${countryName}".`)
+    }
 };
 
 const getAllCountries = async () => {
@@ -60,6 +73,6 @@ const displayAllCountries = async () => {
         countriesContainer.appendChild(countryElement);
     });
 }
-displayAllCountries();
+// displayAllCountries();
 
-// displayCountryDetails("Switzerland");
+displayCountryDetails("Switzerlnd");
