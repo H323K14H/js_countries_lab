@@ -4,15 +4,15 @@ const getCountryByName = async (countryName) => {
     return data;
 }
 
-const nigeria = getCountryByName("Nigeria");
+const switzerland = getCountryByName("Switzerland");
 
 const displayCountryDetails = async () => {
 
-    const countryData = await nigeria;
+    const countryData = await switzerland;
 
     const countryDetails = {
         name: countryData[0].name.common,
-        languages: Object.values(countryData[0].languages),
+        languages: Object.values(countryData[0].languages).join(`, `),
         capital: countryData[0].capital,
         population: countryData[0].population,
     };
