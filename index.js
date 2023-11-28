@@ -35,4 +35,31 @@ const displayCountryDetails = async (countryName) => {
     createCountryDetailsElement(countryDetails);
 };
 
-displayCountryDetails("Switzerland");
+const getAllCountries = async () => {
+    const response = await fetch(`https://restcountries.com/v3.1/all`);
+    const countriesData = await response.json();
+    return countriesData;
+}
+
+const displayAllCountries = async () => {
+    const countriesData = await getAllCountries();
+
+    const countriesContainer = document.querySelector('#all-countries');
+
+    countriesData.forEach((country) => {
+        const countryElement = document.createElement('div');
+        countryElement.textContent = country.name.common;
+
+        const countryDetailsButton = document.createElement('button');
+        countryDetailsButton.textContent = 'Show Details';
+        countryDetailsButton.addEventListener('click', async () => {
+            await displayCountryDetails(country.name.common);
+        });
+
+        countryElement.appendChild(countryDetailsButton);
+        countriesContainer.appendChild(countryElement);
+    });
+}
+displayAllCountries();
+
+// displayCountryDetails("Switzerland");
