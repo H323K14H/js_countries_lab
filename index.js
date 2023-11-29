@@ -1,3 +1,7 @@
+const errorContainer = document.createElement('div');
+errorContainer.id = 'error-container';
+document.body.appendChild(errorContainer);
+
 const fetchCountryData = async (countryName) => {
     try {
         const response = await fetch(`https://restcountries.com/v3.1/name/${countryName}`);
@@ -9,7 +13,11 @@ const fetchCountryData = async (countryName) => {
         const data = await response.json();
         return data;
     } catch (error) {
-        console.error(`ERROR ${error.message}: "${countryName}" is not a country.`);
+        const errorMessage = (`ERROR ${error.message}: "${countryName}" is not a country.`);
+
+        const errorElement = document.createElement('p');
+        errorElement.textContent = errorMessage;
+        errorContainer.appendChild(errorElement);
     }
 };
 
@@ -44,13 +52,16 @@ const displayCountryDetails = async (countryName) => {
 
         createCountryDetailsElement(countryDetails);
     } catch (error) {
-        console.error(`ERROR: Cannot display details of "${countryName}".`)
+        const errorMessage = (`ERROR: Cannot display details of "${countryName}".`);
+        const errorElement = document.createElement('p');
+        errorElement.textContent = errorMessage;
+        errorContainer.appendChild(errorElement);
     }
 };
 
 const getAllCountries = async () => {
     try {
-        const response = await fetch(`https://restcountries.com/v3.1/al`);
+        const response = await fetch(`https://restcountries.com/v3.1/all`);
 
         if (!response.ok) {
             throw new Error(`${response.status}`);
@@ -59,7 +70,10 @@ const getAllCountries = async () => {
         const countriesData = await response.json();
         return countriesData;
     } catch (error) {
-        console.error(`ERROR ${error.message}: Cannot fetch all countries.`)
+        const errorMessage = (`ERROR ${error.message}: Cannot fetch all countries.`);
+        const errorElement = document.createElement('p');
+        errorElement.textContent = errorMessage;
+        errorContainer.appendChild(errorElement);
     }
 };
 
@@ -83,7 +97,10 @@ const displayAllCountries = async () => {
             countriesContainer.appendChild(countryElement);
         });
     } catch (error) {
-        console.error(`Cannot display all countries.`)
+        const errorMessage = (`Cannot display all countries.`);
+        const errorElement = document.createElement('p');
+        errorElement.textContent = errorMessage;
+        errorContainer.appendChild(errorElement);
     }
 };
 
