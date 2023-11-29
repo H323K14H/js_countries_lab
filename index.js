@@ -10,14 +10,17 @@ const fetchCountryData = async (countryName) => {
             throw new Error(`${response.status}`);
         }
 
-        const data = await response.json();
-        return data;
+        const arrayOfCountries = await response.json();
+        console.log(arrayOfCountries);
+        return arrayOfCountries;
     } catch (error) {
         const errorMessage = (`ERROR ${error.message}: "${countryName}" is not a country.`);
 
         const errorElement = document.createElement('p');
         errorElement.textContent = errorMessage;
         errorContainer.appendChild(errorElement);
+
+        console.error(errorMessage);
     }
 };
 
@@ -43,6 +46,7 @@ const displayCountryDetails = async (countryName) => {
 
     try {
         const countryData = await getCountryByName(countryName);
+        
         const countryDetails = {
             name: countryData[0].name.common,
             languages: Object.values(countryData[0].languages).join(`, `),
@@ -53,9 +57,12 @@ const displayCountryDetails = async (countryName) => {
         createCountryDetailsElement(countryDetails);
     } catch (error) {
         const errorMessage = (`ERROR: Cannot display details of "${countryName}".`);
+
         const errorElement = document.createElement('p');
         errorElement.textContent = errorMessage;
         errorContainer.appendChild(errorElement);
+
+        console.error(errorMessage);
     }
 };
 
@@ -67,13 +74,17 @@ const getAllCountries = async () => {
             throw new Error(`${response.status}`);
         }
 
-        const countriesData = await response.json();
-        return countriesData;
+        const arrayOfCountriesData = await response.json();
+        console.log(arrayOfCountriesData);
+        return arrayOfCountriesData;
     } catch (error) {
         const errorMessage = (`ERROR ${error.message}: Cannot fetch all countries.`);
+
         const errorElement = document.createElement('p');
         errorElement.textContent = errorMessage;
         errorContainer.appendChild(errorElement);
+
+        console.error(errorMessage);
     }
 };
 
@@ -98,11 +109,14 @@ const displayAllCountries = async () => {
         });
     } catch (error) {
         const errorMessage = (`Cannot display all countries.`);
+
         const errorElement = document.createElement('p');
         errorElement.textContent = errorMessage;
         errorContainer.appendChild(errorElement);
+
+        console.error(errorMessage);
     }
 };
 
 displayAllCountries();
-// displayCountryDetails("Switzerlnd");
+// displayCountryDetails("Switzerland");
